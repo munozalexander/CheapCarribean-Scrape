@@ -19,4 +19,4 @@ The parameters are:
 * latestArrival : string for latest possible arrival date, "MM/DD/YYYY"
 * minNights : int for minimum nights to stay
 * maxPrice : int for maximum price willing to pay
-* includeMexico : bool for crawling locations in mexico
+* includeMexico : bool for crawling locations in Mexico

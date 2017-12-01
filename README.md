@@ -10,7 +10,8 @@ from crawler import Crawler
 crawler = Crawler(earliestDeparture = '3/10/2018', \
                   latestArrival = '3/18/2018', \
                   minNights = 4, \
-                  maxPrice = 850)
+                  maxPrice = 850, \
+                  includeMexico = False)
 crawler.crawl()
 ```
 The parameters are:
@@ -18,3 +19,4 @@ The parameters are:
 * latestArrival : string for latest possible arrival date, "MM/DD/YYYY"
 * minNights : int for minimum nights to stay
 * maxPrice : int for maximum price willing to pay
+* includeMexico : bool for crawling locations in Mexico

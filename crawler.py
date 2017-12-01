@@ -4,13 +4,13 @@ import datetime
 import itertools
 
 class Crawler():
-    def __init__(self, earliestDeparture, latestArrival, minNights, maxPrice, peoplePerRoom=2, includeMexico=None):
+    def __init__(self, earliestDeparture, latestArrival, minNights, maxPrice, peoplePerRoom=2, mexicoFlag=None):
         '''
         earliestDeparture : string, "MM/DD/YYYY"
         latestArrival : string, "MM/DD/YYYY"
         minNights : int, minimum nights to stay
         maxPrice : int, print filtered results below this price
-        includeMexico : bool, crawl will include locations in mexico
+        mexicoFlag : bool, crawl will include locations in mexico
         '''
         self.__minNights = minNights
         self.__maxPrice = maxPrice
@@ -36,9 +36,9 @@ class Crawler():
             d0 = self.__earliestDeparture+datetime.timedelta(days=delta1)
             self.__possDates += list(itertools.product([d0],[d0+datetime.timedelta(days=i) \
                                 for i in range(self.__minNights,(self.__latestArrival-d0).days+1)]))
-        if includeMexico is None: #keep all locations
+        if mexicoFlag is None: #keep all locations
             pass
-        elif not includeMexico: #pop mexico locations
+        elif not mexicoFlag: #pop mexico locations
             for k in self.__locDict.keys():
                 if "Mexico" in self.__locDict[k]:
                     self.__locDict.pop(k)
@@ -96,5 +96,5 @@ if __name__ == '__main__':
                       minNights = 5, \
                       maxPrice = 900, \
                       peoplePerRoom = 4, \
-                      includeMexico = True)
+                      mexicoFlag = True)
     crawler.crawl()

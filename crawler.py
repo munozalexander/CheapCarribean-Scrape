@@ -4,7 +4,7 @@ import datetime
 import itertools
 
 class Crawler():
-    def __init__(self, earliestDeparture, latestArrival, minNights, maxPrice, includeMexico=True):
+    def __init__(self, earliestDeparture, latestArrival, minNights, maxPrice, peoplePerRoom=2, includeMexico=None):
         '''
         earliestDeparture : string, "MM/DD/YYYY"
         latestArrival : string, "MM/DD/YYYY"
@@ -14,6 +14,7 @@ class Crawler():
         '''
         self.__minNights = minNights
         self.__maxPrice = maxPrice
+        self.__peoplePerRoom = peoplePerRoom
         self.__locDict = {274:"Antigua",275:"Aruba",379:"Bahamas, Abaco",305:"Bahamas, Grand Bahama",\
                           306:"Bahamas, Nassau",377:"Bahamas, Nassau & Paradise Island",307:"Bahamas: Paradise Island",\
                           277:"Barbados",345:"Belize",308:"Bermuda",279:"Bonaire",313:"BVI Tortola",281:"Cayman Islands",\
@@ -35,13 +36,18 @@ class Crawler():
             d0 = self.__earliestDeparture+datetime.timedelta(days=delta1)
             self.__possDates += list(itertools.product([d0],[d0+datetime.timedelta(days=i) \
                                 for i in range(self.__minNights,(self.__latestArrival-d0).days+1)]))
-        if not includeMexico: # pop mexico locations
+        if includeMexico is None: #keep all locations
+            pass
+        elif not includeMexico: #pop mexico locations
             for k in self.__locDict.keys():
                 if "Mexico" in self.__locDict[k]:
                     self.__locDict.pop(k)
+        else: #pop non-mexico locations
+            for k in self.__locDict.keys():
+                if "Mexico" not in self.__locDict[k]:
+                    self.__locDict.pop(k)
 
-
-    def __generateURL(self, loc_id, depart_date, return_date, num_people=2, num_rooms=1):
+    def __generateURL(self, loc_id, depart_date, return_date, num_people=4, num_rooms=1):
         ''' generate urls '''
         base = "https://www.cheapcaribbean.com/search/vacation-packages.html?"
         people = "".join(["searchParameters.rooms%5B0%5D.persons%5B"+str(i)+"%5D=25&" for i in range(num_people)])
@@ -87,7 +93,8 @@ class Crawler():
 if __name__ == '__main__':
     crawler = Crawler(earliestDeparture = '3/10/2018', \
                       latestArrival = '3/18/2018', \
-                      minNights = 4, \
-                      maxPrice = 850, \
-                      includeMexico = False)
+                      minNights = 5, \
+                      maxPrice = 900, \
+                      peoplePerRoom = 4, \
+                      includeMexico = True)
     crawler.crawl()
